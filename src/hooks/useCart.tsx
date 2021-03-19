@@ -23,11 +23,11 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
-
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
+    const storagedCart = localStorage.getItem('@RocketShoes:cart');
+    
+    if (storagedCart) {
+      return JSON.parse(storagedCart);
+    }
 
     return [];
   });
@@ -35,16 +35,31 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const addProduct = async (productId: number) => {
     try {
       // TODO
+      
+      const productExists = cart.find(product => product.id === productId);
+      alert(productExists)
+      const currentAmount = productExists ? productExists.amount : 0;
+     
+      const amount = currentAmount + 1;
+
+      // const productAdded = setCart(...cart, productFind); 
+
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+      
     } catch {
       // TODO
+      toast.error('Não foi possível adicionar o produto')
     }
   };
 
   const removeProduct = (productId: number) => {
     try {
       // TODO
+      
+
     } catch {
       // TODO
+      toast.error('Não foi possível remover o produto')
     }
   };
 
@@ -56,6 +71,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       // TODO
     } catch {
       // TODO
+      toast.error('Não foi possível atualizar o produto')
     }
   };
 
