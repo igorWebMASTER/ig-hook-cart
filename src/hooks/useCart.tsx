@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
@@ -36,15 +36,34 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       // TODO
       
-      const productExists = cart.find(product => product.id === productId);
-      alert(productExists)
-      const currentAmount = productExists ? productExists.amount : 0;
+      const productExistsOnCart = cart.find(product => product.id === productId);
+      const productExists = await api.get(`/products/${productId}`);
+
+      if(!productExists){
+        return;  
+      }
+      
+      const currentAmount = productExistsOnCart ? productExistsOnCart.amount : 0;
+      const stockProductAdded =  await api.get(`/stock/${productId}`);
+      console.log(stockProductAdded);
      
       const amount = currentAmount + 1;
 
       // const productAdded = setCart(...cart, productFind); 
+      const response =  await api.get(`/products/${productId}`);
 
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+      if(amount > stockProductAdded.data){
+        toast.error('Quantidade solicitada maior que o estoque disponível!');
+        return;
+      }
+
+      const data = {
+        ...response.data,
+        amount:1,
+      }
+
+      setCart([...cart, data]);
+
       
     } catch {
       // TODO
@@ -52,10 +71,27 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem("@RocketShoes:cart", JSON.stringify(cart));
+  }, [cart]);
+
+
   const removeProduct = (productId: number) => {
     try {
       // TODO
-      
+
+        const productIndex = cart.findIndex(
+          product => product.id === productId
+        );
+
+        if (productIndex >= 0) {
+          cart.splice(productIndex, 1);
+        } else{
+          toast.error('Erro na remoção do produto')
+          return;
+        }
+
+      return setCart([...cart,]);
 
     } catch {
       // TODO
