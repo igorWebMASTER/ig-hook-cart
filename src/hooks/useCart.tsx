@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, ReactNode, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
@@ -45,7 +46,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       
       const currentAmount = productExistsOnCart ? productExistsOnCart.amount : 0;
       const stockProductAdded =  await api.get(`/stock/${productId}`);
-      console.log(stockProductAdded);
      
       const amount = currentAmount + 1;
 
@@ -86,9 +86,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         if (productIndex >= 0) {
           cart.splice(productIndex, 1);
-        } else{
-          toast.error('Erro na remoção do produto')
-          return;
         }
 
       return setCart([...cart,]);

@@ -27,10 +27,7 @@ const Cart = (): JSX.Element => {
     formatPrice(
       cart.reduce((sumTotal, product) => {
         // TODO
-        if(sumTotal){
-          return sumTotal *  product.price;
-        }
-        return sumTotal;
+          return  sumTotal + (product.price * product.amount);
       }, 0)
     )
 
@@ -61,7 +58,7 @@ const Cart = (): JSX.Element => {
         </thead>
         <tbody>
           {cart.map(product  => (
-          <tr data-testid="product">
+          <tr data-testid="product" key={product.id}>
             <td>
               <img src={product.image} alt="Tênis de Caminhada Leve Confortável" />
             </td>
