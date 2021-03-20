@@ -20,9 +20,12 @@ interface Product {
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
-  // const cartFormatted = cart.map(product => ({
-  //   // TODO
-  // }))
+  const cartFormatted = cart.map(product => ({
+    // TODO
+      ...product,
+      priceFormatted: formatPrice(product.price),
+      subTotal: formatPrice(product.price * product.amount)
+  }))
   const total =
     formatPrice(
       cart.reduce((sumTotal, product) => {
@@ -40,9 +43,7 @@ const Cart = (): JSX.Element => {
 
   function handleProductDecrement(product: Product) {
     // TODO
-    if(product.amount > 1){
       updateProductAmount({productId: product.id, amount: product.amount -1});
-    }
   }
 
   function handleRemoveProduct(productId: number) {
