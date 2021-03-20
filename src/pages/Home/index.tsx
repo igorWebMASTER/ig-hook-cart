@@ -27,7 +27,9 @@ const Home = (): JSX.Element => {
 
   const cartItemsAmount = cart.reduce((sumAmount, product) => {
     // TODO
+    if(sumAmount){
       sumAmount[product.id] = product.amount;  
+    }
     return sumAmount;
   }, {} as CartItemsAmount)
 
@@ -54,8 +56,8 @@ const Home = (): JSX.Element => {
     <ProductList>
       {products.map(product => (
           <li key={product.id}>
-            <img src={product.image} alt="Tênis de Caminhada Leve Confortável" />
-            <strong>{product.title}</strong>
+            <img src={product.image} alt={product.title} />
+            <strong>{product.title} {product.id}</strong>
             <span>{formatPrice(product.price)}</span>
             <button
               type="button"
