@@ -57,7 +57,7 @@ const Home = (): JSX.Element => {
       {products.map(product => (
           <li key={product.id}>
             <img src={product.image} alt={product.title} />
-            <strong>{product.title} {product.id}</strong>
+            <strong>{product.title}</strong>
             <span>{formatPrice(product.price)}</span>
             <button
               type="button"
@@ -73,7 +73,6 @@ const Home = (): JSX.Element => {
             </button>
           </li>
       ))}
-     
     </ProductList>
   );
 };

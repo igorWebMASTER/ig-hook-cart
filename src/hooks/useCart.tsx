@@ -1,5 +1,5 @@
 import React from 'react';
-import { createContext, ReactNode, useContext, useState, useEffect } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
@@ -36,27 +36,31 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const addProduct = async (productId: number) => {
     try {
       // TODO
-      const productExistInCart = cart.find(product => product.id === productId)
-      const { data: stock } = await api.get<Stock>(`stock/${productId}`)
+      const productExistInCart = cart.find(product => product.id === productId);
+      const { data: stock } = await api.get<Stock>(`stock/${productId}`);
       
       if (!productExistInCart) {
-        const { data: product } = await api.get<Product>(`products/${productId}`)
-
+        
         if (stock.amount > 0) {
+          const { data: product } = await api.get<Product>(`products/${productId}`);
           setCart([...cart, { ...product, amount: 1 }])
-          localStorage.setItem('@RocketShoes:cart', JSON.stringify([...cart, { ...product, amount: 1 }]))
+          localStorage.setItem('@RocketShoes:cart', JSON.stringify([...cart, { ...product, amount: 1 }]));
+          toast.success(`Produto adicionado ${product.title}`);
+
           return;
         }
       }  else{
 
         if (stock.amount > productExistInCart.amount) {
+          const { data: product } = await api.get<Product>(`products/${productId}`);
           const updatedCart = cart.map(product => product.id === productId ? {
             ...product,
             amount: product.amount + 1
-          } : product)
+          } : product);
 
           setCart(updatedCart)
-          localStorage.setItem('@RocketShoes:cart', JSON.stringify(updatedCart))
+          localStorage.setItem('@RocketShoes:cart', JSON.stringify(updatedCart));
+          toast.success(`Produto adicionado ${product.title}`);
           return;
         } else {
           toast.error('Quantidade solicitada fora de estoque');
