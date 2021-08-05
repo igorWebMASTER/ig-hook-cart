@@ -20,36 +20,34 @@ interface Product {
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
-  const cartFormatted = cart.map(product => ({
-    // TODO
-      ...product,
-      priceFormatted: formatPrice(product.price),
-      subTotal: formatPrice(product.price * product.amount)
-  }))
-  const total =
-    formatPrice(
-      cart.reduce((sumTotal, product) => {
-        // TODO
-         sumTotal += (product.price * product.amount);
-          return  sumTotal;
-      }, 0)
-    )
-
   function handleProductIncrement(product: Product) {
-    // TODO
     return updateProductAmount({productId: product.id, amount: product.amount + 1});
 
   }
 
   function handleProductDecrement(product: Product) {
-    // TODO
       updateProductAmount({productId: product.id, amount: product.amount -1});
   }
 
   function handleRemoveProduct(productId: number) {
-    // TODO
     return removeProduct(productId);
   }
+
+  const cartFormatted = cart.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+      subTotal: formatPrice(product.price * product.amount)
+  }))
+
+  const total =
+    formatPrice(
+      cart.reduce((sumTotal, product) => {
+         sumTotal += (product.price * product.amount);
+          return  sumTotal;
+      }, 0)
+    )
+
+  
 
   return (
     <Container>
@@ -112,6 +110,9 @@ const Cart = (): JSX.Element => {
             </td>
           </tr>
           ))}
+
+
+          {cartFormatted.length === 0 && 'Não há produtos adicionados'}
         </tbody>
       </ProductTable>
 
